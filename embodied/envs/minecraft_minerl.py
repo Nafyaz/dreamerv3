@@ -44,96 +44,96 @@ np.bool = bool
 
 class MineRLEnv(EnvSpec):
 
-  def __init__(self, resolution=(64, 64), break_speed=50):
-    self.resolution = resolution
-    self.break_speed = break_speed
-    super().__init__(name='MineRLEnv-v1')
+    def __init__(self, resolution=(64, 64), break_speed=50):
+        self.resolution = resolution
+        self.break_speed = break_speed
+        super().__init__(name='MineRLEnv-v1')
 
-  def create_agent_start(self):
-    return [
-        BreakSpeedMultiplier(self.break_speed),
-    ]
+    def create_agent_start(self):
+        return [
+            BreakSpeedMultiplier(self.break_speed),
+        ]
 
-  def create_agent_handlers(self):
-    return []
+    def create_agent_handlers(self):
+        return []
 
-  def create_server_world_generators(self):
-    return [handlers.DefaultWorldGenerator(force_reset=True)]
+    def create_server_world_generators(self):
+        return [handlers.DefaultWorldGenerator(force_reset=True)]
 
-  def create_server_quit_producers(self):
-    return [handlers.ServerQuitWhenAnyAgentFinishes()]
+    def create_server_quit_producers(self):
+        return [handlers.ServerQuitWhenAnyAgentFinishes()]
 
-  def create_server_initial_conditions(self):
-    return [
-        handlers.TimeInitialCondition(
-            allow_passage_of_time=True,
-            start_time=0,
-        ),
-        handlers.SpawningInitialCondition(
-            allow_spawning=True,
-        )
-    ]
+    def create_server_initial_conditions(self):
+        return [
+            handlers.TimeInitialCondition(
+                allow_passage_of_time=True,
+                start_time=0,
+            ),
+            handlers.SpawningInitialCondition(
+                allow_spawning=True,
+            )
+        ]
 
-  def create_observables(self):
-    return [
-        handlers.POVObservation(self.resolution),
-        handlers.FlatInventoryObservation(mc.ALL_ITEMS),
-        handlers.EquippedItemObservation(
-            mc.ALL_ITEMS, _default='air', _other='other'),
-        handlers.ObservationFromCurrentLocation(),
-        handlers.ObservationFromLifeStats(),
-    ]
+    def create_observables(self):
+        return [
+            handlers.POVObservation(self.resolution),
+            handlers.FlatInventoryObservation(mc.ALL_ITEMS),
+            handlers.EquippedItemObservation(
+                mc.ALL_ITEMS, _default='air', _other='other'),
+            handlers.ObservationFromCurrentLocation(),
+            handlers.ObservationFromLifeStats(),
+        ]
 
-  def create_actionables(self):
-    kw = dict(_other='none', _default='none')
-    return [
-        handlers.KeybasedCommandAction('forward', INVERSE_KEYMAP['forward']),
-        handlers.KeybasedCommandAction('back', INVERSE_KEYMAP['back']),
-        handlers.KeybasedCommandAction('left', INVERSE_KEYMAP['left']),
-        handlers.KeybasedCommandAction('right', INVERSE_KEYMAP['right']),
-        handlers.KeybasedCommandAction('jump', INVERSE_KEYMAP['jump']),
-        handlers.KeybasedCommandAction('sneak', INVERSE_KEYMAP['sneak']),
-        handlers.KeybasedCommandAction('attack', INVERSE_KEYMAP['attack']),
-        handlers.CameraAction(),
-        handlers.PlaceBlock(['none'] + mc.ALL_ITEMS, **kw),
-        handlers.EquipAction(['none'] + mc.ALL_ITEMS, **kw),
-        handlers.CraftAction(['none'] + mc.ALL_ITEMS, **kw),
-        handlers.CraftNearbyAction(['none'] + mc.ALL_ITEMS, **kw),
-        handlers.SmeltItemNearby(['none'] + mc.ALL_ITEMS, **kw),
-    ]
+    def create_actionables(self):
+        kw = dict(_other='none', _default='none')
+        return [
+            handlers.KeybasedCommandAction('forward', INVERSE_KEYMAP['forward']),
+            handlers.KeybasedCommandAction('back', INVERSE_KEYMAP['back']),
+            handlers.KeybasedCommandAction('left', INVERSE_KEYMAP['left']),
+            handlers.KeybasedCommandAction('right', INVERSE_KEYMAP['right']),
+            handlers.KeybasedCommandAction('jump', INVERSE_KEYMAP['jump']),
+            handlers.KeybasedCommandAction('sneak', INVERSE_KEYMAP['sneak']),
+            handlers.KeybasedCommandAction('attack', INVERSE_KEYMAP['attack']),
+            handlers.CameraAction(),
+            handlers.PlaceBlock(['none'] + mc.ALL_ITEMS, **kw),
+            handlers.EquipAction(['none'] + mc.ALL_ITEMS, **kw),
+            handlers.CraftAction(['none'] + mc.ALL_ITEMS, **kw),
+            handlers.CraftNearbyAction(['none'] + mc.ALL_ITEMS, **kw),
+            handlers.SmeltItemNearby(['none'] + mc.ALL_ITEMS, **kw),
+        ]
 
-  def is_from_folder(self, folder):
-    return folder == 'none'
+    def is_from_folder(self, folder):
+        return folder == 'none'
 
-  def get_docstring(self):
-    return ''
+    def get_docstring(self):
+        return ''
 
-  def determine_success_from_rewards(self, rewards):
-    return True
+    def determine_success_from_rewards(self, rewards):
+        return True
 
-  def create_rewardables(self):
-    return []
+    def create_rewardables(self):
+        return []
 
-  def create_server_decorators(self):
-    return []
+    def create_server_decorators(self):
+        return []
 
-  def create_mission_handlers(self):
-    return []
+    def create_mission_handlers(self):
+        return []
 
-  def create_monitors(self):
-    return []
+    def create_monitors(self):
+        return []
 
 
 class BreakSpeedMultiplier(handler.Handler):
 
-  def __init__(self, multiplier=1.0):
-    self.multiplier = multiplier
+    def __init__(self, multiplier=1.0):
+        self.multiplier = multiplier
 
-  def to_string(self):
-    return f'break_speed({self.multiplier})'
+    def to_string(self):
+        return f'break_speed({self.multiplier})'
 
-  def xml_template(self):
-    return '<BreakSpeedMultiplier>{{multiplier}}</BreakSpeedMultiplier>'
+    def xml_template(self):
+        return '<BreakSpeedMultiplier>{{multiplier}}</BreakSpeedMultiplier>'
 
 
 NOOP_ACTION = dict(

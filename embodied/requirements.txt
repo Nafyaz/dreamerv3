@@ -7,3 +7,9 @@ psutil
 ruamel.yaml
 tensorflow-cpu
 zmq
+pandas
+crafter
+ale-py
+dm-control
+minerl
+pytest
